@@ -1,5 +1,50 @@
 module.exports = function zeros(expression) {
 	let zeros = 0;
+	//const zeroEndedRegex = /0+$/;
+	const multipliers = expression.split('*');
+	let odds = 0;
+	let evens = 0;
+	let tens = 0;
+
+	multipliers.forEach(multiplier => {
+		const n = parseInt(multiplier);
+		//let evens = 0;
+		
+
+		if (multiplier.indexOf('!!') !== -1) {
+			if (n % 2 === 0) {
+				evens += parseInt(n / 2);
+				zeros += parseInt(n / 10);
+				tens += n % 10 === 0 ? 1 : 0;
+			} else {
+				odds += parseInt(n / 5);
+			}
+		} else {
+			if (n < 5) {
+				return;
+			}
+
+			zeros += parseInt(n / 5);
+			zeros += parseInt(n / 25);
+		}
+	});
+
+	
+
+	zeros += evens > odds ? odds : evens;
+
+	console.log('tens: ', tens);
+	console.log('zeros: ', zeros);
+
+	zeros += tens > 0 ? (tens - 1) : tens;
+	
+
+	return zeros;
+}
+
+
+function zeros__draft(expression) {
+	let zeros = 0;
 	const zeroEndedRegex = /0+$/;
 	const multipliers = expression.split('*');
 
