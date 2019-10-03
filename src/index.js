@@ -2,93 +2,76 @@ module.exports = function zeros(expression) {
 	let zeros = 0;
 	//const zeroEndedRegex = /0+$/;
 	const multipliers = expression.split('*');
-	let odds = 0;
+	let fives = 0;
 	let evens = 0;
-	let tens = 0;
+	//let tens = 0;
 
 	multipliers.forEach(multiplier => {
-		const n = parseInt(multiplier);
+		let n = parseInt(multiplier);
+		debugger;
 		//let evens = 0;
+
+		if (n % 2 === 0)  {
+			evens++;
+		}
+
+		if (n % 5 === 0) {
+			fives++;
+		}
+
+		if (n % 10 === 0) {
+			zeros+= (+n.toString().length - 1);
+		}
 		
 
 		if (multiplier.indexOf('!!') !== -1) {
+			if (n % 5 === 0) {
+				fives--;
+			}
+
 			if (n % 2 === 0) {
+				n-=2;
 				evens += parseInt(n / 2);
+				fives += (parseInt(n / 50) - 1);
 				zeros += parseInt(n / 10);
-				tens += n % 10 === 0 ? 1 : 0;
+				//tens += n % 10 === 0 ? 1 : 0;
 			} else {
-				odds += parseInt(n / 5);
+				//console.log(n)
+				fives += (parseInt(n / 5) - parseInt(n / 10));
+				fives += parseInt(n / 25);
 			}
 		} else {
 			if (n < 5) {
 				return;
 			}
 
-			zeros += parseInt(n / 5);
-			zeros += parseInt(n / 25);
+			if (n % 10 === 0) {
+				//zeros--;
+			}
+
+			let n25 = parseInt(n / 25)
+			zeros += n25;
+
+			n-=2;
+
+			evens += parseInt(n / 2);
+			fives += (parseInt(n / 5) - parseInt(n25 / 5));
 		}
 	});
 
-	
-
-	zeros += evens > odds ? odds : evens;
-
-	console.log('tens: ', tens);
+	console.log('evens: ', evens);
+	console.log('fives: ', fives);
 	console.log('zeros: ', zeros);
 
-	zeros += tens > 0 ? (tens - 1) : tens;
+	zeros += evens > fives ? fives : evens;
+
+	//console.log('tens: ', tens);
+	console.log('zeros finale: ', zeros);
+
+	//zeros += tens > 0 ? (tens - 1) : tens;
 	
-
+debugger;
 	return zeros;
 }
 
-
-function zeros__draft(expression) {
-	let zeros = 0;
-	const zeroEndedRegex = /0+$/;
-	const multipliers = expression.split('*');
-
-	multipliers.forEach(multiplier => {
-		const n = parseInt(multiplier);
-
-
-
-		let evens = 0;
-
-		if (multiplier.indexOf('!!') !== -1) {
-
-		} else {
-			if (n < 5) {
-				return;
-			}
-			
-			for (let i = 1; i <= n; i++ ) {
-				const zeroEnded = i.toString().match(zeroEndedRegex);
-
-				if (zeroEnded) {
-					zeros += zeroEnded[0].length;
-				} else {
-					if (i % 2 === 0) {
-						evens++;
-					}
-
-					if (i % 5 === 0 && evens != 0) {
-						zeros++;
-						evens = 0;
-					}
-				}
-			}
-
-			zeros += parseInt(n / 25);
-		}
-		
-
-		
-	});
-
-	return zeros;
-}
-
-//const str = '9!!*10!!*7!!';
-
-//console.log('must be 3: ', zeros(str));
+//zeros('5!');
