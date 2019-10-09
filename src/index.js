@@ -19,6 +19,10 @@ function getTwenties(n) {
 	return (getN(20, n, 20) - parseInt(n / 100));
 }
 
+function getTwentyFives(n) {
+	return getN(25, n, 50);
+}
+
 function getTens(n) {
 	return getN(10, n, 10);
 }
@@ -34,14 +38,12 @@ function getEvens(n) {
 module.exports = function zeros(expression) {
 	const multipliers = expression.split('*');
 	let zeros = 0;
-	let fifties = 0;
-	let twenties = 0;
+	//let fifties = 0;
+	//let twenties = 0;
 	let fives = 0;
 	let evens = 0;
 
 	multipliers.forEach(multiplier => {
-		// console.log('---------------------');
-		// console.log('multiplier: ', multiplier)
 		let n = parseInt(multiplier);
 		const decimalLevel = getDecimalLevel(n); // Разряд числа
 		let hundrieds = 0;
@@ -50,25 +52,17 @@ module.exports = function zeros(expression) {
 			hundrieds =  parseInt(n / Math.pow(10, decimalLevel));
 		}
 		
-		// console.log('n: ', n);
-		// console.log('Math.pow(10, decimalLevel): ', Math.pow(10, decimalLevel));
-		// console.log('decimalLevel: ', decimalLevel);
-		// console.log('hundrieds: ', hundrieds);
 		let tens = getTens(n);
-
-		// console.log('n: ', n);
-		// console.log('tens: ', tens);
 
 		if (n >= 100) {
 			tens += hundrieds;
 		}
 
-		// console.log('tens: ', tens);
-		
 		if (isDoubleFactorial(multiplier)) {
 			if (n % 2 === 0) {
-				twenties += getTwenties(n);
-				fifties += getFifties(n);
+				//twenties += getTwenties(n);
+				//fifties += getFifties(n);
+				fives += getFifties(n);
 				evens += getEvens(n);
 				zeros += tens;
 				//totalFives += fifties;
@@ -76,15 +70,17 @@ module.exports = function zeros(expression) {
 				// console.log('totalFives 01: ', totalFives);
 			} else {
 				fives += getFives(n);
+				fives += getTwentyFives(n);
 			}
 
 		} else {
 			fives += getFives(n);
 			// console.log('fives: ', fives);
-			twenties += getTwenties(n);
+			//twenties += getTwenties(n);
 			// console.log('twenties: ', twenties);
-			fifties += getFifties(n);
-
+			//fifties += getFifties(n);
+			fives += getFifties(n);
+			fives += getTwentyFives(n);
 
 			evens += getEvens(n);
 			zeros += tens;
@@ -95,11 +91,18 @@ module.exports = function zeros(expression) {
 console.log('**********************');
 	console.log('evens: ', evens);
 	console.log('fives: ', fives);
-	console.log('twenties: ', twenties);
-	console.log('fifties: ', fifties);
+	//console.log('twenties: ', twenties);
+	//console.log('fifties: ', fifties);
 	console.log('zeros: ', zeros);
 
-	if (fifties) {
+	//let tw = twenties;
+	//let fw = fifties;
+
+	//fives += fifties;
+	//zeros += (parseInt(fives/2) - 1) < 0 ? 0 : (parseInt(fives/2) - 1);
+
+
+	/*if (fifties) {
 		if (twenties) {
 			let tens = fifties > twenties ? twenties : fifties;
 			zeros += tens;
@@ -122,18 +125,21 @@ console.log('**********************');
 			twenties -= tens;
 			fives -= tens;
 		}
-	}
+	}*/
 
 	if (fives) {
 		if (evens) {
 			let tens = fives > evens ? evens : fives;
 			zeros += tens;
-			fives -= tens;
-			evens -= tens;
+			//fives -= tens;
+			//evens -= tens;
+
+			//zeros += Math.round(fives / 5);
 		}
 	}
 
-
+//console.log('tw: ', tw)
+	//zeros+=tw;
 
 
 	//zeros += evens > totalFives ? totalFives : evens;
@@ -143,7 +149,9 @@ console.log('**********************');
 
 	//zeros += totalTwenties;
 
-	//console.log('tens: ', tens);
+	//console.log('fw: ', fw);
+	//zeros += tw;
+	//zeros -= fw;
 	console.log('zeros finale: ', zeros);
 
 	//zeros += tens > 0 ? (tens - 1) : tens;
