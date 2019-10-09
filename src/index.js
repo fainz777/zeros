@@ -70,12 +70,7 @@ module.exports = function zeros(expression) {
 		}
 	});
 
-	if (fives) {
-		if (evens) {
-			let tens = fives > evens ? evens : fives;
-			zeros += tens;
-		}
-	}
+	zeros += fives > evens ? evens : fives;
 
 	return zeros;
 }
